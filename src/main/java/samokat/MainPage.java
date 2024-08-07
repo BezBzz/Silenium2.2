@@ -5,8 +5,8 @@ import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
@@ -14,15 +14,17 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class MainPage {
     //адрес главной страницы
     private static final String PAGE_URL = "https://qa-scooter.praktikum-services.ru/";
-    //кнопка заказать
+    //кнопка заказать вверху
     private  static final By ORDER_BUTTON = By.xpath("//button[@class='Button_Button__ra12g']");
-
+    //кнопка заказать внизу
+    private  static final By ORDER_BUTTON_DOWN = By.xpath("Button_Button__ra12g Button_Middle__1CSJM");
     //поля заказа :
              // Имя, фамилия, адрес, метро, телефон,
     private static final By NAME = By.xpath ("//input[@placeholder='* Имя']");
-    private static final By SURNAME = By.xpath("////input[@placeholder='* Фамилия'] ");
+    private static final By SURNAME = By.xpath("//input[@placeholder='* Фамилия'] ");
     private static final By ADDRESS = By.xpath("//input[@placeholder='* Адрес: куда привезти заказ']");
-    private static final By METRO_STATION = By.xpath("//input[@placeholder='* Станция метро']");
+    private static final By METRO_STATION = By.xpath("//div[@class='select-search__value']");
+    private static final By VALUE_METRO = By.xpath("///li[@class='select-search__row'][2]");
     private static final By NUMBER_TELEPHONE = By.xpath("//input[@placeholder='* Телефон: на него позвонит курьер']");
     // кнопка Далее
     private  static final By FURTHER_BUTTON = By.xpath("//button[@class='Button_Button__ra12g Button_Middle__1CSJM']");
@@ -58,6 +60,10 @@ driver.get(PAGE_URL);
 public void clickButtonOrder(){
      driver.findElement(ORDER_BUTTON).click();
 }
+
+    public void clickButtonOrderDown(){
+        driver.findElement(ORDER_BUTTON).click();
+    }
 public void fillInTheNameField(){
      driver.findElement(NAME).sendKeys("Кирилл");
 }
@@ -68,10 +74,13 @@ public void fillInTheNameField(){
         driver.findElement(ADDRESS).sendKeys("г. Москва ул. Чистова д.21");
     }
     public void fillInMetroStationField(){
-     driver.findElement(METRO_STATION).click();
+          driver.findElement(METRO_STATION).click();
+          WebElement wait = new WebDriverWait(driver, Duration.ofSeconds(10)).
+                  until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='select-search__select']")));
+             driver.findElement(VALUE_METRO).click();
          }
     public void fillInTelephoneField(){
-     driver.findElement(NUMBER_TELEPHONE).sendKeys("892625555555");
+     driver.findElement(NUMBER_TELEPHONE).sendKeys("89262555555");
  }
     public void clickFurtherButton(){
      driver.findElement(FURTHER_BUTTON).click();
@@ -93,5 +102,12 @@ public void fillInTheNameField(){
     }
     public void clickYesButton(){
      driver.findElement(BUTTON_YES).click();
+    }
+    public void expectedTrue(){
+//     WebDriverWait element = new WebDriverWait(driver, Duration.ofSeconds(15))
+//             .until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[text()='Заказ оформлен']")));
+        new WebDriverWait(driver, Duration.ofSeconds(25))
+                .until(ExpectedConditions.elementToBeClickable(By.className("Button_Button__ra12g Button_Middle__1CSJM")));
+
     }
 }
